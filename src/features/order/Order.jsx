@@ -12,6 +12,7 @@ import OrderItem from "./OrderItem";
 import Button from "../../ui/Button";
 import { useDispatch } from "react-redux";
 import { makeOrderPriority } from "../cart/cartSlice";
+import { useEffect } from "react";
 
 // const order = {
 //   id: "ABCDEF",
@@ -64,6 +65,13 @@ function Order() {
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
   const dispatch = useDispatch();
 
+  useEffect(
+    function () {
+      if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+    },
+    [fetcher],
+  );
+
   return (
     <div>
       <div className="my-7 flex flex-wrap items-center justify-between gap-x-5">
@@ -88,7 +96,15 @@ function Order() {
 
       <ul className="my-5 divide-y divide-stone-300">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.id + item.name} />
+          <OrderItem
+            item={item}
+            key={item.id + item.name}
+            ingredients={
+              fetcher.data?.find((pizza) => pizza.id === item.pizzaId)
+                .ingredients
+            }
+            isLoadingIngredients={fetcher.state === "loading"}
+          />
         ))}
       </ul>
 

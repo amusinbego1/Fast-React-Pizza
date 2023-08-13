@@ -7,8 +7,13 @@ function OrderItem({ item, isLoadingIngredients, ingredients }) {
   return (
     <li>
       <div className="flex items-center justify-between py-3">
-        <p>
-          <span>{quantity}&times;</span> {name}
+        <p className="flex flex-col">
+          <span>
+            {quantity}&times; {name}
+          </span>
+          <small className="ml-7 font-light capitalize">
+            {isLoadingIngredients ? "Loading" : ingredients?.join(", ")}
+          </small>
         </p>
         <p className="font-semibold">{formatCurrency(totalPrice)}</p>
       </div>
