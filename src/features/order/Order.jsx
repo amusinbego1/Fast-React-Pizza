@@ -1,6 +1,6 @@
 // Test ID: IIDSAT
 
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useFetcher, useLoaderData } from "react-router-dom";
 import { getOrder, updateOrder } from "../../services/apiRestaurant";
 import {
   calcMinutesLeft,
@@ -51,6 +51,7 @@ import { makeOrderPriority } from "../cart/cartSlice";
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const order = useLoaderData();
+  const fetcher = useFetcher();
   const {
     id,
     status,
@@ -100,11 +101,11 @@ function Order() {
           </p>
         </div>
         {!priority && calcMinutesLeft(estimatedDelivery) >= 10 && (
-          <Form method="POST">
+          <fetcher.Form method="PATCH">
             <Button name={"order"} id="order" value={JSON.stringify(order)}>
               Make Priority
             </Button>
-          </Form>
+          </fetcher.Form>
         )}
       </div>
     </div>
